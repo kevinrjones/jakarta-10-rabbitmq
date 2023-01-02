@@ -1,0 +1,6 @@
+rootProject.name = "Quote Project"
+include 'QuoteRabbitLibrary',
+        'FanOutPubSubConsumer',
+        'RegisterUserConsolePullConsumer',
+        'RegisterUserConsolePollConsumer',
+        'RestService'

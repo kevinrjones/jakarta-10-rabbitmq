@@ -1,0 +1,37 @@
+package com.knowledgespike.api;
+
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import io.javalin.Javalin;
+
+public class Application {
+
+    static Connection connection;
+
+    public static void main(String[] args) {
+        Javalin app = Javalin.create().start(7777);
+        try {
+            var connectionFactory = new ConnectionFactory();
+            connectionFactory.setHost("localhost");
+
+            connection = connectionFactory.newConnection("app:rest");
+
+            app.post("/users", UserController.registerUser);
+            app.post("/userswithexchange", UserController.registerUserWithExchange);
+            app.post("/fanoutquotes", FanOutQuotesController.getQuotes);
+            app.post("/cartopicquotes", TopicQuotesController.getCarQuotes);
+            app.post("/hometopicquotes", TopicQuotesController.getHomeQuotes);
+            app.post("/carheaderquotes", HeaderQuotesController.getCarQuotes);
+            app.post("/homeheaderquotes", HeaderQuotesController.getHomeQuotes);
+            app.post("/usersDlx", UserController.regsterUserDlx);
+            app.post("/loan", LoanController.apply);
+        } catch (Exception e) {
+            System.out.println(" [x] Unable to start connection to RabbitMQ");
+            System.out.println(e.getCause().getMessage());
+            app.stop();
+        }
+    }
+}
+
+
+
